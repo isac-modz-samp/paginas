@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3 Etapas - Siga, Curta, Comente</title>
+    <title>4 Etapas - Siga, Curta, Comente e Grupo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -117,8 +117,8 @@
 </head>
 <body>
 <div class="container">
-    <h2>🔒 Complete as 3 etapas</h2>
-    <div class="progress" id="progressText">⬜ Etapa 1 pendente | ⬜ Etapa 2 pendente | ⬜ Etapa 3 pendente</div>
+    <h2>🔒 Complete as 4 etapas</h2>
+    <div class="progress" id="progressText">⬜ Etapa 1 pendente | ⬜ Etapa 2 pendente | ⬜ Etapa 3 pendente | ⬜ Etapa 4 pendente</div>
 
     <!-- Etapa 1 -->
     <div class="step" id="step1">
@@ -147,6 +147,15 @@
         <div class="status" id="status3"></div>
     </div>
 
+    <!-- Etapa 4 -->
+    <div class="step" id="step4">
+        <div class="step-title">👥 Etapa 4: Entrar no grupo</div>
+        <div class="link-info">Clique no botão para entrar no grupo do WhatsApp:</div>
+        <button id="btn4" disabled>🔗 Entrar no grupo WhatsApp</button>
+        <div class="loader" id="loader4"></div>
+        <div class="status" id="status4"></div>
+    </div>
+
     <!-- Download final -->
     <div id="downloadArea" class="download-area">
         <p>🎉 Todas as etapas concluídas!</p>
@@ -158,16 +167,20 @@
     let step1Done = false;
     let step2Done = false;
     let step3Done = false;
+    let step4Done = false;
 
     const btn1 = document.getElementById('btn1');
     const btn2 = document.getElementById('btn2');
     const btn3 = document.getElementById('btn3');
+    const btn4 = document.getElementById('btn4');
     const loader1 = document.getElementById('loader1');
     const loader2 = document.getElementById('loader2');
     const loader3 = document.getElementById('loader3');
+    const loader4 = document.getElementById('loader4');
     const status1 = document.getElementById('status1');
     const status2 = document.getElementById('status2');
     const status3 = document.getElementById('status3');
+    const status4 = document.getElementById('status4');
     const progressText = document.getElementById('progressText');
     const downloadArea = document.getElementById('downloadArea');
 
@@ -176,20 +189,24 @@
         texto += step1Done ? '✅ Etapa 1 concluída' : '⬜ Etapa 1 pendente';
         texto += step2Done ? ' | ✅ Etapa 2 concluída' : ' | ⬜ Etapa 2 pendente';
         texto += step3Done ? ' | ✅ Etapa 3 concluída' : ' | ⬜ Etapa 3 pendente';
+        texto += step4Done ? ' | ✅ Etapa 4 concluída' : ' | ⬜ Etapa 4 pendente';
         progressText.innerHTML = texto;
 
+        // Libera próxima etapa apenas se a anterior estiver concluída
         btn2.disabled = !step1Done;
         btn3.disabled = !step2Done;
+        btn4.disabled = !step3Done;
 
-        if (step1Done && step2Done && step3Done) {
+        if (step1Done && step2Done && step3Done && step4Done) {
             downloadArea.style.display = 'block';
         }
     }
 
-    function executarEtapa(etapa, btn, loader, statusEl, url) {
+    function executarEtapa(etapa, btn, loader, statusEl, url, nomeEtapa) {
         if ((etapa === 1 && step1Done) ||
             (etapa === 2 && step2Done) ||
-            (etapa === 3 && step3Done)) return;
+            (etapa === 3 && step3Done) ||
+            (etapa === 4 && step4Done)) return;
 
         // Abre o link em nova aba
         window.open(url, '_blank');
@@ -209,6 +226,7 @@
             if (etapa === 1) step1Done = true;
             if (etapa === 2) step2Done = true;
             if (etapa === 3) step3Done = true;
+            if (etapa === 4) step4Done = true;
 
             atualizarProgresso();
         }, 3000);
@@ -217,10 +235,12 @@
     // Links
     const linkCanal = 'https://www.youtube.com/@isacmodstv2';
     const linkVideo = 'https://youtu.be/44dwVBGNLkM?si=fB7_UBsNZxwVkp_W';
+    const linkGrupo = 'https://chat.whatsapp.com/LpssDUywb8rFl0HTv10se1';
 
     btn1.addEventListener('click', () => executarEtapa(1, btn1, loader1, status1, linkCanal));
     btn2.addEventListener('click', () => executarEtapa(2, btn2, loader2, status2, linkVideo));
     btn3.addEventListener('click', () => executarEtapa(3, btn3, loader3, status3, linkVideo));
+    btn4.addEventListener('click', () => executarEtapa(4, btn4, loader4, status4, linkGrupo));
 
     atualizarProgresso();
 </script>
