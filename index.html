@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 Etapas - Siga, Curta, Comente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a1a;
+            color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #14142b;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+        }
+        h2 {
+            color: #ff4757;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .step {
+            background: #1e1e3a;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff4757;
+        }
+        .step-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #ffa502;
+        }
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 14px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0 5px;
+            transition: 0.3s;
+            width: 100%;
+        }
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        button.done {
+            background: #2ed573;
+            cursor: default;
+        }
+        .loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            margin: 10px auto;
+            border: 3px solid #2a2a4a;
+            border-top: 3px solid #ff4757;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status {
+            font-size: 12px;
+            color: #ffa502;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .download-area {
+            background: #1e5a3c;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        .download-area a {
+            background: #2ed573;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .progress {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #1e1e3a;
+            border-radius: 40px;
+        }
+        .link-info {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>🔒 Complete as 3 etapas</h2>
+    <div class="progress" id="progressText">⬜ Etapa 1 pendente | ⬜ Etapa 2 pendente | ⬜ Etapa 3 pendente</div>
+
+    <!-- Etapa 1 -->
+    <div class="step" id="step1">
+        <div class="step-title">📺 Etapa 1: Seguir canal</div>
+        <div class="link-info">Clique no botão para abrir o canal:</div>
+        <button id="btn1">🔗 Seguir canal no YouTube</button>
+        <div class="loader" id="loader1"></div>
+        <div class="status" id="status1"></div>
+    </div>
+
+    <!-- Etapa 2 -->
+    <div class="step" id="step2">
+        <div class="step-title">👍 Etapa 2: Deixar like</div>
+        <div class="link-info">Clique no botão para abrir o vídeo:</div>
+        <button id="btn2" disabled>🔗 Deixar like no vídeo</button>
+        <div class="loader" id="loader2"></div>
+        <div class="status" id="status2"></div>
+    </div>
+
+    <!-- Etapa 3 -->
+    <div class="step" id="step3">
+        <div class="step-title">💬 Etapa 3: Comentar</div>
+        <div class="link-info">Clique no botão para abrir o vídeo:</div>
+        <button id="btn3" disabled>🔗 Comentar no vídeo</button>
+        <div class="loader" id="loader3"></div>
+        <div class="status" id="status3"></div>
+    </div>
+
+    <!-- Download final -->
+    <div id="downloadArea" class="download-area">
+        <p>🎉 Todas as etapas concluídas!</p>
+        <a href="https://www.mediafire.com/file/ahry5xyuimfjc47/ISAC+MODZ+SAMP🚩.zip/file" target="_blank">📥 Baixar arquivo agora</a>
+    </div>
+</div>
+
+<script>
+    let step1Done = false;
+    let step2Done = false;
+    let step3Done = false;
+
+    const btn1 = document.getElementById('btn1');
+    const btn2 = document.getElementById('btn2');
+    const btn3 = document.getElementById('btn3');
+    const loader1 = document.getElementById('loader1');
+    const loader2 = document.getElementById('loader2');
+    const loader3 = document.getElementById('loader3');
+    const status1 = document.getElementById('status1');
+    const status2 = document.getElementById('status2');
+    const status3 = document.getElementById('status3');
+    const progressText = document.getElementById('progressText');
+    const downloadArea = document.getElementById('downloadArea');
+
+    function atualizarProgresso() {
+        let texto = '';
+        texto += step1Done ? '✅ Etapa 1 concluída' : '⬜ Etapa 1 pendente';
+        texto += step2Done ? ' | ✅ Etapa 2 concluída' : ' | ⬜ Etapa 2 pendente';
+        texto += step3Done ? ' | ✅ Etapa 3 concluída' : ' | ⬜ Etapa 3 pendente';
+        progressText.innerHTML = texto;
+
+        btn2.disabled = !step1Done;
+        btn3.disabled = !step2Done;
+
+        if (step1Done && step2Done && step3Done) {
+            downloadArea.style.display = 'block';
+        }
+    }
+
+    function executarEtapa(etapa, btn, loader, statusEl, url) {
+        if ((etapa === 1 && step1Done) ||
+            (etapa === 2 && step2Done) ||
+            (etapa === 3 && step3Done)) return;
+
+        // Abre o link em nova aba
+        window.open(url, '_blank');
+
+        // Desabilita botão e mostra loading
+        btn.disabled = true;
+        loader.style.display = 'block';
+        statusEl.innerText = '⏳ Verificando aguarde...';
+
+        // Carregamento de 3 segundos
+        setTimeout(() => {
+            loader.style.display = 'none';
+            statusEl.innerText = '✅ Etapa concluída!';
+            btn.innerHTML = '✓ Concluído';
+            btn.classList.add('done');
+
+            if (etapa === 1) step1Done = true;
+            if (etapa === 2) step2Done = true;
+            if (etapa === 3) step3Done = true;
+
+            atualizarProgresso();
+        }, 3000);
+    }
+
+    // Links
+    const linkCanal = 'https://www.youtube.com/@isacmodstv2';
+    const linkVideo = 'https://youtu.be/44dwVBGNLkM?si=fB7_UBsNZxwVkp_W';
+
+    btn1.addEventListener('click', () => executarEtapa(1, btn1, loader1, status1, linkCanal));
+    btn2.addEventListener('click', () => executarEtapa(2, btn2, loader2, status2, linkVideo));
+    btn3.addEventListener('click', () => executarEtapa(3, btn3, loader3, status3, linkVideo));
+
+    atualizarProgresso();
+</script>
+</body>
+</html>
